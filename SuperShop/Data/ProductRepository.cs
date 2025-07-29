@@ -1,4 +1,6 @@
-﻿using SuperShop.Data.Entities;
+﻿using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using SuperShop.Data.Entities;
 
 namespace SuperShop.Data
 {
@@ -8,6 +10,13 @@ namespace SuperShop.Data
 
         public ProductRepository(DataContext context) : base(context)
         {
+            _context = context;
+        }
+
+        
+        public IQueryable GetAllWithUsers()
+        {
+            return _context.Products.Include(p => p.User);
         }
     }
 }
