@@ -48,10 +48,46 @@ namespace SuperShop.Controllers
             if (ModelState.IsValid)
             {
                 await _orderRepository.AddItemToOrderAsync(model, this.User.Identity.Name);
-                return Redirect("Create");
+                return RedirectToAction("Create");
             }
 
             return View(model);
+        }
+
+        public async Task<IActionResult> DeleteItem(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            await _orderRepository.DeleteDetailTempAsync(id.Value);
+
+            return RedirectToAction("Create");
+        }
+
+        public async Task<IActionResult> Increase(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            await _orderRepository.ModifyOrderDetailTempQuantityAsync(id.Value, 1);
+
+            return RedirectToAction("Create");
+        }
+
+        public async Task<IActionResult> Decrease(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            await _orderRepository.ModifyOrderDetailTempQuantityAsync(id.Value, -1);
+
+            return RedirectToAction("Create");
         }
     }
 }
